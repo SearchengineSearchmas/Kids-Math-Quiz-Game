@@ -2,8 +2,8 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Kids Math Quiz</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"> <!-- Mobile scaling -->
+  <title>Kids Math Quiz with Leaderboard</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <style>
     body {
       background: linear-gradient(to bottom, #ffcccc, #ccffff);
@@ -55,6 +55,27 @@
       margin-top: 10px;
       color: #990099;
     }
+    #leaderboard {
+      margin-top: 30px;
+      text-align: left;
+      display: inline-block;
+      background: #fff;
+      padding: 15px;
+      border-radius: 10px;
+      border: 2px solid #ff3399;
+    }
+    #leaderboard h2 {
+      text-align: center;
+      color: #ff3399;
+    }
+    #leaderboard ul {
+      list-style: none;
+      padding: 0;
+    }
+    #leaderboard li {
+      font-size: 1.1em;
+      margin: 5px 0;
+    }
   </style>
 </head>
 <body>
@@ -66,10 +87,34 @@
   <div id="feedback"></div>
   <div id="score">IQ Points: 0</div>
 
+  <div id="leaderboard">
+    <h2>🏆 Leaderboard</h2>
+    <ul id="board"></ul>
+  </div>
+
   <script>
     let score = 0;
     let difficulty = 1;
     let correctAnswer;
+    let freeAnswers = 0;
+
+    // Fake students
+    let students = [
+      {name: "Alice", iq: 5},
+      {name: "Ben", iq: 10},
+      {name: "Cathy", iq: 15},
+      {name: "David", iq: 20},
+      {name: "Ella", iq: 25}
+    ];
+
+    function updateLeaderboard() {
+      let boardHTML = "";
+      students.forEach(s => {
+        boardHTML += `<li>${s.name}: ${s.iq} IQ</li>`;
+      });
+      boardHTML += `<li><strong>You: ${score} IQ</strong></li>`;
+      document.getElementById("board").innerHTML = boardHTML;
+    }
 
     function generateQuestion() {
       let num1 = Math.floor(Math.random() * (5 * difficulty)) + 1;
@@ -98,12 +143,23 @@
         score++;
         difficulty++;
         document.getElementById("feedback").innerText = "✅ Correct! +1 IQ point!";
+        checkLeaderboard();
       } else {
         document.getElementById("feedback").innerText = `❌ Wrong! The answer was ${correctAnswer}.`;
       }
       document.getElementById("score").innerText = "IQ Points: " + score;
       document.getElementById("answer").value = "";
       generateQuestion();
+      updateLeaderboard();
+    }
+
+    function checkLeaderboard() {
+      students.forEach(s => {
+        if (score === s.iq) {
+          freeAnswers += 5;
+          document.getElementById("feedback").innerText += ` 🎁 You overtook ${s.name}! You earned 5 free answers! (Total free answers: ${freeAnswers})`;
+        }
+      });
     }
 
     // Allow Enter key to submit
@@ -114,6 +170,7 @@
     });
 
     generateQuestion();
+    updateLeaderboard();
   </script>
 </body>
 </html>
