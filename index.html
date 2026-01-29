@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Kids Math Quiz</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"> <!-- Mobile scaling -->
+  <style>
+    body {
+      background: linear-gradient(to bottom, #ffcccc, #ccffff);
+      font-family: "Comic Sans MS", cursive, sans-serif;
+      text-align: center;
+      margin: 0;
+      padding: 0;
+    }
+    h1 {
+      color: #ff3399;
+      font-size: 2em;
+      margin: 20px;
+    }
+    #question {
+      font-size: 1.8em;
+      margin: 20px;
+      color: #333;
+    }
+    input {
+      font-size: 1.2em;
+      padding: 10px;
+      border-radius: 8px;
+      border: 2px solid #ff3399;
+      width: 80%; /* fits small screens */
+      max-width: 300px;
+    }
+    button {
+      font-size: 1.1em;
+      padding: 12px 20px;
+      margin: 15px;
+      border-radius: 8px;
+      border: none;
+      background-color: #33cc33;
+      cursor: pointer;
+      width: 70%; /* mobile-friendly button */
+      max-width: 250px;
+    }
+    button:hover {
+      background-color: #009900;
+      color: #fff;
+    }
+    #score {
+      font-size: 1.3em;
+      color: #006600;
+      margin-top: 15px;
+    }
+    #feedback {
+      font-size: 1.2em;
+      margin-top: 10px;
+      color: #990099;
+    }
+
+    /* Responsive tweaks */
+    @media (max-width: 600px) {
+      h1 { font-size: 1.6em; }
+      #question { font-size: 1.4em; }
+      input, button { font-size: 1em; }
+    }
+  </style>
+</head>
+<body>
+  <h1>🎉 Kids Math Quiz 🎉</h1>
+  <div id="question">Loading question...</div>
+  <input type="number" id="answer" placeholder="Your answer">
+  <br>
+  <button onclick="checkAnswer()">Submit</button>
+  <div id="feedback"></div>
+  <div id="score">IQ Points: 0</div>
+
+  <script>
+    let score = 0;
+    let difficulty = 1;
+    let correctAnswer;
+
+    function generateQuestion() {
+      let num1 = Math.floor(Math.random() * (5 * difficulty)) + 1;
+      let num2 = Math.floor(Math.random() * (5 * difficulty)) + 1;
+      let operators = ["+", "-", "✖️", "➗"];
+      let operator = operators[Math.floor(Math.random() * operators.length)];
+
+      if (operator === "➗") {
+        num1 = num1 * num2; // ensures clean division
+      }
+
+      let questionText = `${num1} ${operator} ${num2}`;
+      document.getElementById("question").innerText = "Solve: " + questionText;
+
+      switch (operator) {
+        case "+": correctAnswer = num1 + num2; break;
+        case "-": correctAnswer = num1 - num2; break;
+        case "✖️": correctAnswer = num1 * num2; break;
+        case "➗": correctAnswer = num1 / num2; break;
+      }
+    }
+
+    function checkAnswer() {
+      let userAnswer = parseInt(document.getElementById("answer").value);
+      if (userAnswer === correctAnswer) {
+        score++;
+        difficulty++;
+        document.getElementById("feedback").innerText = "✅ Correct! +1 IQ point!";
+      } else {
+        document.getElementById("feedback").innerText = `❌ Wrong! The answer was ${correctAnswer}.`;
+      }
+      document.getElementById("score").innerText = "IQ Points: " + score;
+      document.getElementById("answer").value = "";
+      generateQuestion();
+    }
+
+    generateQuestion();
+  </script>
+</body>
+</html>
