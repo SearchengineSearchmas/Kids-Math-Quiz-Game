@@ -27,7 +27,7 @@
       padding: 10px;
       border-radius: 8px;
       border: 2px solid #ff3399;
-      width: 80%; /* fits small screens */
+      width: 80%;
       max-width: 300px;
     }
     button {
@@ -38,7 +38,7 @@
       border: none;
       background-color: #33cc33;
       cursor: pointer;
-      width: 70%; /* mobile-friendly button */
+      width: 70%;
       max-width: 250px;
     }
     button:hover {
@@ -54,13 +54,6 @@
       font-size: 1.2em;
       margin-top: 10px;
       color: #990099;
-    }
-
-    /* Responsive tweaks */
-    @media (max-width: 600px) {
-      h1 { font-size: 1.6em; }
-      #question { font-size: 1.4em; }
-      input, button { font-size: 1em; }
     }
   </style>
 </head>
@@ -112,6 +105,13 @@
       document.getElementById("answer").value = "";
       generateQuestion();
     }
+
+    // Allow Enter key to submit
+    document.getElementById("answer").addEventListener("keydown", function(event) {
+      if (event.key === "Enter") {
+        checkAnswer();
+      }
+    });
 
     generateQuestion();
   </script>
